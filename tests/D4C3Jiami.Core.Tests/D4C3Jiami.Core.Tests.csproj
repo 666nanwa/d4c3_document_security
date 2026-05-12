@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>D4C3Jiami.Core.Tests</AssemblyName>
+    <RootNamespace>D4C3Jiami.Core.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\D4C3Jiami.Core\D4C3Jiami.Core.csproj" />
+  </ItemGroup>
+</Project>

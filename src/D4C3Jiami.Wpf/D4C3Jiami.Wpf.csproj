@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>D4C3Jiami</AssemblyName>
+    <RootNamespace>D4C3Jiami.Wpf</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ApplicationIcon />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\D4C3Jiami.Core\D4C3Jiami.Core.csproj" />
+  </ItemGroup>
+</Project>

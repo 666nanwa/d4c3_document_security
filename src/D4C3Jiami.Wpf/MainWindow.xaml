@@ -1,0 +1,334 @@
+<Window
+    x:Class="D4C3Jiami.Wpf.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="D4C3 文件加密"
+    Width="1040"
+    Height="760"
+    MinWidth="820"
+    MinHeight="650"
+    Background="{StaticResource PageBrush}">
+
+    <Grid Margin="28">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Padding="22"
+            Background="{StaticResource PanelBrush}"
+            BorderBrush="#E4E7EC"
+            BorderThickness="1"
+            CornerRadius="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock
+                        FontSize="30"
+                        FontWeight="SemiBold"
+                        Text="D4C3 文件加密" />
+                    <TextBlock
+                        MaxWidth="700"
+                        Margin="0,7,0,0"
+                        Style="{StaticResource MutedText}"
+                        Text="本地离线处理任意文件，支持 1 到 3 层独立密码加密，并可还原原文件名和原始内容。"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Border
+                    Grid.Column="1"
+                    Padding="14,8"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource SoftAccentBrush}"
+                    CornerRadius="6">
+                    <TextBlock
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource AccentDarkBrush}"
+                        Text="本地离线" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1" Margin="0,18,0,0">
+            <TabItem Header="加密">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="0,18,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.12*" />
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="0.88*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <Border
+                                x:Name="EncryptDropZone"
+                                MinHeight="160"
+                                Padding="24"
+                                AllowDrop="True"
+                                Background="{StaticResource PanelBrush}"
+                                BorderBrush="{StaticResource LineBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                DragOver="FileDropZone_DragOver"
+                                Drop="EncryptDropZone_Drop">
+                                <StackPanel>
+                                    <TextBlock
+                                        FontSize="19"
+                                        FontWeight="SemiBold"
+                                        Text="拖入要加密的文件" />
+                                    <TextBlock
+                                        x:Name="EncryptFileText"
+                                        Margin="0,8,0,18"
+                                        Style="{StaticResource MutedText}"
+                                        Text="也可以点击下方按钮选择任意文件。"
+                                        TextWrapping="Wrap" />
+                                    <Button
+                                        Width="120"
+                                        HorizontalAlignment="Left"
+                                        Click="PickEncryptFile_Click"
+                                        Content="选择文件"
+                                        Style="{StaticResource SecondaryButton}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border
+                                Margin="0,16,0,0"
+                                Padding="20"
+                                Background="{StaticResource PanelBrush}"
+                                BorderBrush="#E4E7EC"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="18" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Style="{StaticResource FieldLabel}" Text="加密层数" />
+                                        <ComboBox
+                                            x:Name="LayerCountCombo"
+                                            Width="150"
+                                            HorizontalAlignment="Left"
+                                            SelectionChanged="LayerCountCombo_SelectionChanged" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Style="{StaticResource FieldLabel}" Text="输出扩展名" />
+                                        <ComboBox
+                                            x:Name="OutputExtensionCombo"
+                                            Width="150"
+                                            HorizontalAlignment="Left" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+
+                        <Border
+                            Grid.Column="2"
+                            Padding="20"
+                            Background="{StaticResource PanelBrush}"
+                            BorderBrush="#E4E7EC"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SectionTitle}" Text="加密配置" />
+                                <TextBlock
+                                    Margin="0,-4,0,14"
+                                    Style="{StaticResource MutedText}"
+                                    Text="每一层都可以选择不同算法和独立密码。"
+                                    TextWrapping="Wrap" />
+
+                                <Border Padding="14" Background="#FAFBFC" BorderBrush="#EAECF0" BorderThickness="1" CornerRadius="7">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="14" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Style="{StaticResource FieldLabel}" Text="第 1 层算法" />
+                                        <TextBlock Grid.Column="2" Style="{StaticResource FieldLabel}" Text="第 1 层密码" />
+                                        <ComboBox x:Name="Layer1AlgorithmCombo" Grid.Row="1" />
+                                        <PasswordBox x:Name="Layer1PasswordBox" Grid.Row="1" Grid.Column="2" />
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    x:Name="Layer2Panel"
+                                    Margin="0,10,0,0"
+                                    Padding="14"
+                                    Background="#FAFBFC"
+                                    BorderBrush="#EAECF0"
+                                    BorderThickness="1"
+                                    CornerRadius="7">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="14" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Style="{StaticResource FieldLabel}" Text="第 2 层算法" />
+                                        <TextBlock Grid.Column="2" Style="{StaticResource FieldLabel}" Text="第 2 层密码" />
+                                        <ComboBox x:Name="Layer2AlgorithmCombo" Grid.Row="1" />
+                                        <PasswordBox x:Name="Layer2PasswordBox" Grid.Row="1" Grid.Column="2" />
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    x:Name="Layer3Panel"
+                                    Margin="0,10,0,0"
+                                    Padding="14"
+                                    Background="#FAFBFC"
+                                    BorderBrush="#EAECF0"
+                                    BorderThickness="1"
+                                    CornerRadius="7">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="14" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Style="{StaticResource FieldLabel}" Text="第 3 层算法" />
+                                        <TextBlock Grid.Column="2" Style="{StaticResource FieldLabel}" Text="第 3 层密码" />
+                                        <ComboBox x:Name="Layer3AlgorithmCombo" Grid.Row="1" />
+                                        <PasswordBox x:Name="Layer3PasswordBox" Grid.Row="1" Grid.Column="2" />
+                                    </Grid>
+                                </Border>
+
+                                <Button
+                                    x:Name="EncryptButton"
+                                    Margin="0,18,0,0"
+                                    Width="156"
+                                    HorizontalAlignment="Left"
+                                    Click="Encrypt_Click"
+                                    Content="生成加密文件" />
+                                <TextBlock
+                                    x:Name="EncryptStatusText"
+                                    Margin="0,12,0,0"
+                                    Style="{StaticResource MutedText}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="解密还原">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="0,18,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.05*" />
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="0.95*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <Border
+                                x:Name="DecryptDropZone"
+                                MinHeight="160"
+                                Padding="24"
+                                AllowDrop="True"
+                                Background="{StaticResource PanelBrush}"
+                                BorderBrush="{StaticResource LineBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                DragOver="FileDropZone_DragOver"
+                                Drop="DecryptDropZone_Drop">
+                                <StackPanel>
+                                    <TextBlock FontSize="19" FontWeight="SemiBold" Text="拖入加密文件" />
+                                    <TextBlock
+                                        x:Name="DecryptFileText"
+                                        Margin="0,8,0,18"
+                                        Style="{StaticResource MutedText}"
+                                        Text="软件会读取文件头，并显示原文件名和加密层信息。"
+                                        TextWrapping="Wrap" />
+                                    <Button
+                                        Width="140"
+                                        HorizontalAlignment="Left"
+                                        Click="PickDecryptFile_Click"
+                                        Content="选择加密文件"
+                                        Style="{StaticResource SecondaryButton}" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border
+                                Margin="0,16,0,0"
+                                Padding="20"
+                                Background="{StaticResource PanelBrush}"
+                                BorderBrush="#E4E7EC"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource SectionTitle}" Text="文件信息" />
+                                    <TextBlock
+                                        x:Name="DecryptHeaderText"
+                                        Style="{StaticResource MutedText}"
+                                        Text="尚未读取文件信息。"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <Border
+                            Grid.Column="2"
+                            Padding="20"
+                            Background="{StaticResource PanelBrush}"
+                            BorderBrush="#E4E7EC"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SectionTitle}" Text="还原密码" />
+                                <TextBlock
+                                    Margin="0,-4,0,14"
+                                    Style="{StaticResource MutedText}"
+                                    Text="按加密时的层顺序输入密码。"
+                                    TextWrapping="Wrap" />
+
+                                <StackPanel x:Name="DecryptLayer1Panel">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="第 1 层密码" />
+                                    <PasswordBox x:Name="DecryptLayer1PasswordBox" Margin="0,0,0,12" />
+                                </StackPanel>
+                                <StackPanel x:Name="DecryptLayer2Panel">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="第 2 层密码" />
+                                    <PasswordBox x:Name="DecryptLayer2PasswordBox" Margin="0,0,0,12" />
+                                </StackPanel>
+                                <StackPanel x:Name="DecryptLayer3Panel">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="第 3 层密码" />
+                                    <PasswordBox x:Name="DecryptLayer3PasswordBox" Margin="0,0,0,12" />
+                                </StackPanel>
+
+                                <Button
+                                    x:Name="DecryptButton"
+                                    Width="130"
+                                    HorizontalAlignment="Left"
+                                    Click="Decrypt_Click"
+                                    Content="还原文件" />
+                                <TextBlock
+                                    x:Name="DecryptStatusText"
+                                    Margin="0,12,0,0"
+                                    Style="{StaticResource MutedText}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
