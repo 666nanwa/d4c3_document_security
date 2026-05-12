@@ -1,66 +1,105 @@
-# D4C3 文件加密
+# D4C3 Document Security
 
-D4C3 文件加密是一款本地离线 Windows 桌面工具。它可以把任意文件做 1 到 3 层加密，每层使用独立密码和独立算法，并在解密时恢复原文件名、原扩展名和原始内容。
+[Chinese](README.zh-CN.md) | English
 
-## 直接使用
+D4C3 Document Security is a local Windows desktop app for encrypting files in multiple layers. It can encrypt any file with 1 to 3 independent layers, and each layer can use its own password and algorithm. During decryption, the app restores the original file name, extension, and bytes.
 
-当前推荐使用 WPF 版：
+## Download
 
-- 可执行程序：`D:\d4c3_jiami\dist\D4C3Jiami-WPF\D4C3Jiami.exe`
-- 压缩包：`D:\d4c3_jiami\dist\D4C3Jiami-WPF.zip`
+Use the latest package from GitHub Releases:
 
-旧的 `dist\D4C3Jiami` 是 WinUI 版本，在当前环境里出现过启动错误，不建议继续使用。
+- Release asset: `D4C3Jiami-WPF.zip`
+- Run after unzip: `D4C3Jiami.exe`
 
-## 加密文件
+Local development builds are generated under:
 
-1. 打开 `D4C3Jiami.exe`。
-2. 进入“加密”页。
-3. 拖入文件，或点击“选择文件”。
-4. 选择加密层数：1、2 或 3。
-5. 为每一层选择算法并输入密码。
-6. 选择输出扩展名：`.enc`、`.jpg`、`.txt` 或 `.mp4`。
-7. 点击“生成加密文件”。
+```text
+dist/D4C3Jiami-WPF/
+```
 
-生成的文件会保存在原文件同一目录下。如果同名文件已存在，软件会自动追加编号。
+## Features
 
-## 解密还原
+- Encrypt any local file offline.
+- Use 1, 2, or 3 encryption layers.
+- Set an independent password for each layer.
+- Choose a different algorithm for each layer.
+- Restore the original file name, extension, and content.
+- Save encrypted output with `.enc`, `.jpg`, `.txt`, or `.mp4` extensions.
 
-1. 进入“解密还原”页。
-2. 拖入加密文件，或点击“选择加密文件”。
-3. 软件读取文件头后，会显示原文件名、大小、层数和算法。
-4. 按加密时的层顺序输入每一层密码。
-5. 点击“还原文件”。
-
-还原后的文件会输出到加密文件所在目录下的 `还原文件` 文件夹中。
-
-## 注意事项
-
-- 密码必须记住。软件不保存明文密码，忘记密码就无法还原。
-- 加密后的 `.jpg`、`.txt`、`.mp4` 只是伪装扩展名，不代表图片、文本或视频播放器可以正常打开。
-- 不要删除或修改加密文件内容，否则可能无法解密。
-- 加密大文件时请等待完成，不要强制关闭程序。
-- 建议先用一个不重要的小文件测试完整的加密和解密流程，再处理重要文件。
-- 重要文件建议保留一份离线备份。
-
-## 支持的算法
+## Supported Algorithms
 
 - AES-256-GCM
 - ChaCha20-Poly1305
 - AES-256-CBC + HMAC-SHA256
 
-第一版使用 `PBKDF2-HMAC-SHA256` 从密码派生密钥。每层都会保存解密所需的盐、随机数和算法参数，但不会保存密码本身。
+The first version uses `PBKDF2-HMAC-SHA256` for key derivation. The encrypted package stores the metadata needed for decryption, such as salts, nonces, layer order, and algorithm parameters. It does not store plaintext passwords.
 
-## 项目结构
+## How to Use
 
-- `src/D4C3Jiami.Core`：多层加密、解密、文件头和容器格式。
-- `src/D4C3Jiami.Wpf`：当前推荐使用的 WPF 桌面界面。
-- `src/D4C3Jiami.App`：旧 WinUI 版本，保留源码但不作为当前推荐发布版。
-- `tests/D4C3Jiami.Core.Tests`：核心加密行为测试。
+### Encrypt a File
 
-## 验证
+1. Open `D4C3Jiami.exe`.
+2. Go to the Encrypt tab.
+3. Drag a file into the app, or click Select File.
+4. Choose 1 to 3 encryption layers.
+5. Select the algorithm and enter the password for each layer.
+6. Choose the output extension.
+7. Click Generate Encrypted File.
 
-已验证：
+The encrypted file is created in the same folder as the original file. If a file with the same name already exists, the app automatically adds a number to the output file name.
 
-- 核心加密测试通过，覆盖单层、三层混合、错误密码、文件头读取和空文件。
-- WPF 版发布成功。
-- 发布后的 `D4C3Jiami.exe` 能启动并显示窗口标题 `D4C3 文件加密`。
+### Decrypt a File
+
+1. Go to the Decrypt tab.
+2. Drag in an encrypted file, or click Select Encrypted File.
+3. The app reads the package header and displays the original file information.
+4. Enter the layer passwords in the original encryption order.
+5. Click Restore File.
+
+Restored files are written to a `还原文件` folder next to the encrypted file.
+
+## Important Notes
+
+- Keep your passwords safe. The app cannot recover forgotten passwords.
+- The `.jpg`, `.txt`, and `.mp4` output options only disguise the extension. They are not valid image, text, or video files.
+- Do not edit encrypted files manually, or decryption may fail.
+- Test the full encrypt/decrypt workflow with a small file before using the app for important files.
+- Keep a separate backup of important files.
+
+## Project Structure
+
+```text
+src/D4C3Jiami.Core        Core encryption pipeline and package format
+src/D4C3Jiami.Wpf         Recommended WPF desktop app
+src/D4C3Jiami.App         Older WinUI app source kept for reference
+tests/D4C3Jiami.Core.Tests Core encryption tests
+```
+
+## Build and Test
+
+This workspace includes a local `.dotnet8` SDK and local NuGet cache for machines without a global .NET SDK.
+
+```powershell
+$env:DOTNET_CLI_HOME=(Join-Path (Get-Location) '.dotnet-home')
+$env:APPDATA=(Join-Path (Get-Location) '.appdata')
+$env:LOCALAPPDATA=(Join-Path (Get-Location) '.localappdata')
+$env:NUGET_PACKAGES=(Join-Path (Get-Location) '.nuget-packages')
+$env:NUGET_HTTP_CACHE_PATH=(Join-Path (Get-Location) '.nuget-http-cache')
+$env:NUGET_PLUGINS_CACHE_PATH=(Join-Path (Get-Location) '.nuget-plugins-cache')
+
+.\.dotnet8\dotnet.exe run --no-restore --project .\tests\D4C3Jiami.Core.Tests\D4C3Jiami.Core.Tests.csproj
+.\.dotnet8\dotnet.exe build .\src\D4C3Jiami.Wpf\D4C3Jiami.Wpf.csproj --no-restore -c Release -p:Platform=x64
+```
+
+## Release Package
+
+To create the Windows x64 package:
+
+```powershell
+.\.dotnet8\dotnet.exe publish .\src\D4C3Jiami.Wpf\D4C3Jiami.Wpf.csproj --no-restore -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:Platform=x64 -o .\dist\D4C3Jiami-WPF
+Compress-Archive -Path .\dist\D4C3Jiami-WPF\* -DestinationPath .\dist\D4C3Jiami-WPF.zip -Force
+```
+
+## License
+
+No license has been selected yet.
